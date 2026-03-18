@@ -2,9 +2,9 @@
  * Canonical Profile Fields — Single Source of Truth
  *
  * Every onboarding screen, Journey Doula task, and profile display component
- * MUST import column names and enum values from this file.
+ * MUST import column names, enum values, and display labels from this file.
  *
- * Never hardcode column names or enum values as strings in components.
+ * Never hardcode column names, enum values, or display labels as strings in components.
  * This prevents schema drift between surfaces.
  */
 
@@ -62,12 +62,17 @@ export const GC_FIELDS = {
   CALL_PREFERENCE: 'gc_call_preference',
 } as const;
 
-/** Canonical GC enum values */
+/** Canonical GC enum values — uses onboarding values as canonical */
 export const GC_ENUMS = {
   SMOKING_STATUS: {
     NEVER: 'never',
     QUIT_OVER_1_YEAR: 'quit_over_1_year',
-    QUIT_UNDER_1_YEAR: 'quit_under_1_year',
+    QUIT_UNDER_1_YEAR: 'quit_less_than_1_year',
+    CURRENT: 'current_smoker',
+  },
+  VAPING_STATUS: {
+    NEVER: 'never',
+    FORMER: 'former',
     CURRENT: 'current',
   },
   ALCOHOL_USE: {
@@ -82,28 +87,50 @@ export const GC_ENUMS = {
     CURRENT_MEDICAL: 'current_medical',
   },
   SUBSTANCE_USE: {
-    NEVER: 'never',
-    FORMER: 'former',
-    CURRENT: 'current',
+    NO_HISTORY: 'no_history',
+    PAST_OVER_2_YEARS: 'past_over_2_years',
+    PAST_UNDER_2_YEARS: 'past_under_2_years',
+    CURRENT: 'current_use',
+  },
+  CPS_HISTORY: {
+    NO: 'no',
+    CLOSED: 'closed',
+    ACTIVE: 'active',
+    PREFER_NOT: 'prefer_not_to_say',
+  },
+  RELATIONSHIP_STATUS: {
+    SINGLE: 'single',
+    IN_RELATIONSHIP: 'in_relationship',
+    MARRIED: 'married',
+    DIVORCED: 'divorced',
+    OTHER: 'other',
+  },
+  HEALTH_INSURANCE: {
+    EMPLOYER_PRIVATE: 'employer_private',
+    ACA_MARKETPLACE: 'aca_marketplace',
+    MEDICAID: 'medicaid',
+    NO_INSURANCE: 'no_insurance',
+    NOT_SURE: 'not_sure',
+  },
+  COMPENSATION: {
+    RANGE_35_45: '35000_45000',
+    RANGE_45_55: '45000_55000',
+    RANGE_55_65: '55000_65000',
+    RANGE_65_75: '65000_75000',
+    RANGE_75_PLUS: '75000_plus',
+    FLEXIBLE: 'flexible',
+    NOT_SURE: 'not_sure',
+  },
+  WILLING_TO_TRAVEL: {
+    LOCAL_ONLY: 'local_only',
+    WITHIN_STATE: 'within_state',
+    NEIGHBORING_STATES: 'neighboring_states',
+    ANYWHERE_US: 'anywhere_us',
   },
   LGBTQ_COMFORT: {
     ABSOLUTELY: 'absolutely',
     OPEN_TO_IT: 'open_to_it',
     NO: 'no',
-  },
-  COMPENSATION: {
-    RANGE_25_35: '25000_35000',
-    RANGE_35_45: '35000_45000',
-    RANGE_45_55: '45000_55000',
-    RANGE_55_65: '55000_65000',
-    RANGE_65_PLUS: '65000_plus',
-    NEGOTIABLE: 'negotiable',
-  },
-  WILLING_TO_TRAVEL: {
-    LOCAL_ONLY: 'local_only',
-    STATEWIDE: 'statewide',
-    REGIONAL: 'regional',
-    ANYWHERE_US: 'anywhere_us',
   },
   MENTAL_HEALTH_HISTORY: {
     NONE: 'none',
@@ -114,33 +141,28 @@ export const GC_ENUMS = {
   DELIVERY_METHODS: {
     VAGINAL: 'vaginal',
     C_SECTION: 'c_section',
-    VAGINAL_AFTER_C_SECTION: 'vaginal_after_c_section',
-  },
-  RELATIONSHIP_STATUS: {
-    SINGLE: 'single',
-    MARRIED: 'married',
-    DOMESTIC_PARTNERSHIP: 'domestic_partnership',
-    DIVORCED: 'divorced',
-    SEPARATED: 'separated',
-  },
-  HEALTH_INSURANCE: {
-    EMPLOYER: 'employer',
-    MARKETPLACE: 'marketplace',
-    MEDICAID: 'medicaid',
-    NONE: 'none',
-    OTHER: 'other',
-  },
-  CPS_HISTORY: {
-    NO: 'no',
-    YES_RESOLVED: 'yes_resolved',
-    YES_OPEN: 'yes_open',
+    VBAC: 'vbac',
   },
   CITIZENSHIP_STATUS: {
     US_CITIZEN: 'us_citizen',
     PERMANENT_RESIDENT: 'permanent_resident',
     WORK_VISA: 'work_visa',
-    UNDOCUMENTED: 'undocumented',
     OTHER_VISA: 'other_visa',
+    UNDOCUMENTED: 'undocumented',
+    PREFER_NOT: 'prefer_not_to_say',
+  },
+  BMI_REMEDIATION: {
+    WORKING_ON_IT: 'working_on_it',
+    PROCEED_ANYWAY: 'proceed_anyway',
+    PAUSE: 'pause',
+  },
+  IP_TYPES_OPEN_TO: {
+    COUPLES: 'couples',
+    SINGLE_PARENTS: 'single_parents',
+    FIRST_TIME: 'first_time',
+    EXISTING_CHILDREN: 'existing_children',
+    INTERNATIONAL: 'international',
+    NO_PREFERENCE: 'no_preference',
   },
 } as const;
 
@@ -179,10 +201,81 @@ export const IP_FIELDS = {
 /** Canonical IP enum values */
 export const IP_ENUMS = {
   JOURNEY_TYPE: {
-    SURROGACY_ONLY: 'surrogacy_only',
-    EGG_DONOR_ONLY: 'egg_donor_only',
-    SURROGACY_AND_DONOR: 'surrogacy_egg_donor',
+    SURROGACY: 'surrogacy',
+    EGG_DONATION: 'egg_donation',
+    BOTH: 'both',
     DOULA_ONLY: 'doula_only',
+  },
+  FAMILY_STRUCTURE: {
+    COUPLE: 'couple',
+    SINGLE: 'single',
+    OTHER: 'other',
+  },
+  PARTNERSHIP_TYPE: {
+    SAME_SEX: 'same_sex',
+    DIFFERENT_SEX: 'different_sex',
+    PREFER_NOT: 'prefer_not_to_say',
+  },
+  EMBRYO_STATUS: {
+    READY: 'ready',
+    CREATING: 'creating',
+    NONE: 'none',
+    UNSURE: 'unsure',
+  },
+  CLINIC_STATUS: {
+    NOT_STARTED: 'not_started',
+    RESEARCHING: 'researching',
+    SELECTED: 'selected',
+    WORKING_WITH: 'working_with',
+    EMBRYOS_STORED: 'embryos_stored',
+  },
+  GC_EXPERIENCE_PREFERENCE: {
+    EXPERIENCED_ONLY: 'experienced_only',
+    PREFER_EXPERIENCED: 'prefer_experienced',
+    NO_PREFERENCE: 'no_preference',
+    NOT_SURE: 'not_sure',
+  },
+  VIEWS_ON_TERMINATION: {
+    COMFORTABLE_ANY: 'comfortable_any',
+    SEVERE_MEDICAL: 'severe_medical',
+    LIFE_THREATENING: 'life_threatening',
+    NOT_COMFORTABLE: 'not_comfortable',
+    NEED_TO_THINK: 'need_to_think',
+  },
+  GC_LOCATION_PREFERENCE: {
+    LOCAL: 'local',
+    SAME_STATE: 'same_state',
+    NEAR_CLINIC: 'near_clinic',
+    ANYWHERE_US: 'anywhere_us',
+    NOT_SURE: 'not_sure',
+  },
+  DONOR_ANONYMITY_PREFERENCE: {
+    ANONYMOUS: 'anonymous',
+    SEMI_OPEN: 'semi_open',
+    OPEN_ID: 'open_id',
+    KNOWN_FULLY_OPEN: 'known_fully_open',
+    OPEN_TO_ANY: 'open_to_any',
+  },
+  DONOR_EXPERIENCE_PREFERENCE: {
+    PROVEN_ONLY: 'proven_only',
+    PREFER_PROVEN: 'prefer_proven',
+    NO_PREFERENCE: 'no_preference',
+    NOT_SURE: 'not_sure',
+  },
+  TIMELINE: {
+    IMMEDIATELY: 'immediately',
+    ONE_THREE_MONTHS: '1_3_months',
+    THREE_SIX_MONTHS: '3_6_months',
+    SIX_PLUS_MONTHS: '6_plus_months',
+    EXPLORING: 'exploring',
+  },
+  EMPLOYER_BENEFITS: {
+    COMPREHENSIVE: 'comprehensive',
+    PARTIAL: 'partial',
+    PROGYNY: 'progyny',
+    NONE: 'none',
+    SELF_EMPLOYED: 'self_employed',
+    UNSURE: 'unsure',
   },
 } as const;
 
@@ -212,3 +305,344 @@ export const ED_FIELDS = {
   PRIOR_DONATIONS: 'prior_donations',
   AVAILABLE_TO_START: 'available_to_start',
 } as const;
+
+/** Canonical ED enum values — uses onboarding values as canonical */
+export const ED_ENUMS = {
+  EYE_COLOR: {
+    BROWN: 'brown',
+    BLUE: 'blue',
+    GREEN: 'green',
+    HAZEL: 'hazel',
+    GRAY: 'gray',
+    AMBER: 'amber',
+    OTHER: 'other',
+  },
+  HAIR_COLOR: {
+    BLACK: 'black',
+    DARK_BROWN: 'dark_brown',
+    LIGHT_BROWN: 'light_brown',
+    BLONDE: 'blonde',
+    RED: 'red',
+    AUBURN: 'auburn',
+    OTHER: 'other',
+  },
+  HAIR_TEXTURE: {
+    STRAIGHT: 'straight',
+    WAVY: 'wavy',
+    CURLY: 'curly',
+    COILY_KINKY: 'coily_kinky',
+  },
+  ETHNICITY: {
+    CAUCASIAN: 'caucasian',
+    EAST_ASIAN: 'east_asian',
+    SOUTH_ASIAN: 'south_asian',
+    SOUTHEAST_ASIAN: 'southeast_asian',
+    HISPANIC_LATINO: 'hispanic_latino',
+    AFRICAN_AMERICAN: 'african_american',
+    MIDDLE_EASTERN: 'middle_eastern',
+    NATIVE_AMERICAN: 'native_american',
+    PACIFIC_ISLANDER: 'pacific_islander',
+    JEWISH: 'jewish',
+    MIXED_MULTIRACIAL: 'mixed_multiracial',
+    OTHER: 'other',
+  },
+  SKIN_TONE: {
+    VERY_FAIR: 'very_fair',
+    FAIR: 'fair',
+    MEDIUM: 'medium',
+    OLIVE: 'olive',
+    TAN: 'tan',
+    BROWN: 'brown',
+    DARK_BROWN: 'dark_brown',
+  },
+  BLOOD_TYPE: {
+    A_POS: 'A+',
+    A_NEG: 'A-',
+    B_POS: 'B+',
+    B_NEG: 'B-',
+    AB_POS: 'AB+',
+    AB_NEG: 'AB-',
+    O_POS: 'O+',
+    O_NEG: 'O-',
+    DONT_KNOW: 'dont_know',
+  },
+  SMOKING_STATUS: {
+    NEVER: 'never',
+    QUIT_OVER_1_YEAR: 'quit_over_1_year',
+    QUIT_UNDER_1_YEAR: 'quit_less_than_1_year',
+    CURRENT: 'current_smoker',
+  },
+  VAPING_STATUS: {
+    NEVER: 'never',
+    FORMER: 'former',
+    CURRENT: 'current',
+  },
+  ALCOHOL_USE: {
+    NONE: 'none',
+    SOCIAL: 'social',
+    REGULAR: 'regular',
+  },
+  MARIJUANA_USE: {
+    NEVER: 'never',
+    FORMER: 'former',
+    CURRENT_RECREATIONAL: 'current_recreational',
+    CURRENT_MEDICAL: 'current_medical',
+  },
+  SUBSTANCE_USE: {
+    NO_HISTORY: 'no_history',
+    PAST_OVER_2_YEARS: 'past_over_2_years',
+    PAST_UNDER_2_YEARS: 'past_under_2_years',
+    CURRENT: 'current_use',
+  },
+  EDUCATION_LEVEL: {
+    HIGH_SCHOOL: 'high_school',
+    GED: 'ged',
+    SOME_COLLEGE: 'some_college',
+    ASSOCIATES: 'associates',
+    BACHELORS: 'bachelors',
+    MASTERS: 'masters',
+    DOCTORAL: 'doctoral',
+    IN_COLLEGE: 'in_college',
+    OTHER: 'other',
+  },
+  RELATIONSHIP_STATUS: {
+    SINGLE: 'single',
+    IN_RELATIONSHIP: 'in_relationship',
+    MARRIED: 'married',
+    OTHER: 'other',
+  },
+  COMPENSATION_RANGE: {
+    RANGE_5_7_5: '5000_7500',
+    RANGE_7_5_10: '7500_10000',
+    RANGE_10_15: '10000_15000',
+    RANGE_15_PLUS: '15000_plus',
+    ASRM_GUIDELINES: 'asrm_guidelines',
+    FLEXIBLE: 'flexible',
+    NOT_SURE: 'not_sure',
+  },
+  ANONYMITY_LEVEL: {
+    ANONYMOUS: 'anonymous',
+    SEMI_OPEN: 'semi_open',
+    OPEN: 'open',
+    KNOWN: 'known',
+    OPEN_TO_DISCUSSING: 'open_to_discussing',
+  },
+  AVAILABLE_TO_START: {
+    READY_NOW: 'ready_now',
+    WITHIN_3_MONTHS: 'within_3_months',
+    THREE_SIX_MONTHS: '3_6_months',
+    FLEXIBLE: 'flexible',
+  },
+  TRAVEL_WILLINGNESS: {
+    LOCAL_ONLY: 'local_only',
+    WITHIN_STATE: 'within_state',
+    NEIGHBORING_STATES: 'neighboring_states',
+    ANYWHERE_US: 'anywhere_us',
+  },
+  OVARIAN_STATUS: {
+    BOTH: 'both',
+    ONE_REMOVED: 'one_removed',
+    BOTH_REMOVED: 'both_removed',
+    UNSURE: 'unsure',
+  },
+  CONTRACEPTION: {
+    NONE: 'none',
+    ORAL: 'oral_contraceptive',
+    HORMONAL_IUD: 'hormonal_iud',
+    COPPER_IUD: 'copper_iud',
+    DEPO: 'depo_provera',
+    IMPLANT: 'contraceptive_implant',
+    CONDOMS: 'condoms',
+    OTHER: 'other',
+  },
+  CALL_PREFERENCE: {
+    VIDEO: 'video',
+    AUDIO_ONLY: 'audio_only',
+    MESSAGING_ONLY: 'messaging_only',
+  },
+} as const;
+
+// ═══════════════════════════════════════════════════════════════════
+// Display Label Maps — slug → human-readable
+// ═══════════════════════════════════════════════════════════════════
+
+/** GC field display labels keyed by column name → stored value → label */
+export const GC_LABELS: Record<string, Record<string, string>> = {
+  gc_smoking_status: {
+    never: 'Never smoked',
+    quit_over_1_year: 'Quit over 1 year ago',
+    quit_less_than_1_year: 'Quit less than 1 year ago',
+    current_smoker: 'Current smoker',
+  },
+  gc_vaping_status: {
+    never: 'Never vaped',
+    former: 'Former vaper',
+    current: 'Current vaper',
+  },
+  gc_alcohol_use: {
+    none: 'No alcohol use',
+    social: 'Social drinker',
+    regular: 'Regular drinker',
+  },
+  gc_marijuana_use: {
+    never: 'Never',
+    former: 'Former use',
+    current_recreational: 'Current recreational use',
+    current_medical: 'Current medical use',
+  },
+  gc_substance_use: {
+    no_history: 'No history',
+    past_over_2_years: 'Past use — over 2 years ago',
+    past_under_2_years: 'Past use — under 2 years ago',
+    current_use: 'Current use',
+  },
+  gc_cps_history: {
+    no: 'No',
+    closed: 'Yes — closed case',
+    active: 'Yes — active case',
+    prefer_not_to_say: 'Prefer not to say',
+  },
+  gc_relationship_status: {
+    single: 'Single',
+    in_relationship: 'In a relationship',
+    married: 'Married',
+    divorced: 'Divorced',
+    other: 'Other',
+  },
+  gc_health_insurance: {
+    employer_private: 'Employer-provided',
+    aca_marketplace: 'ACA Marketplace',
+    medicaid: 'Medicaid',
+    no_insurance: 'No insurance',
+    not_sure: 'Not sure',
+  },
+  gc_base_compensation_expectation: {
+    '35000_45000': '$35,000 – $45,000',
+    '45000_55000': '$45,000 – $55,000',
+    '55000_65000': '$55,000 – $65,000',
+    '65000_75000': '$65,000 – $75,000',
+    '75000_plus': '$75,000+',
+    flexible: 'Flexible',
+    not_sure: 'Not sure',
+  },
+  gc_willing_to_travel: {
+    local_only: 'Local only',
+    within_state: 'Within my state',
+    neighboring_states: 'Neighboring states',
+    anywhere_us: 'Anywhere in the US',
+  },
+  gc_lgbtq_comfort: {
+    absolutely: 'Absolutely — fully supportive',
+    open_to_it: 'Open to it',
+    no: 'No',
+  },
+  gc_mental_health_history: {
+    none: 'No mental health history',
+    managed_past: 'Past — managed and resolved',
+    managed_current: 'Currently managed with treatment',
+    unmanaged: 'Currently unmanaged',
+  },
+  gc_delivery_methods: {
+    vaginal: 'Vaginal',
+    c_section: 'C-section',
+    vbac: 'Vaginal after C-section (VBAC)',
+  },
+  gc_citizenship_status: {
+    us_citizen: 'US Citizen',
+    permanent_resident: 'Permanent Resident',
+    work_visa: 'Work Visa',
+    other_visa: 'Other Visa',
+    undocumented: 'Undocumented',
+    prefer_not_to_say: 'Prefer not to say',
+  },
+};
+
+/** ED field display labels keyed by column name → stored value → label */
+export const ED_LABELS: Record<string, Record<string, string>> = {
+  smoking_status: {
+    never: 'Never smoked',
+    quit_over_1_year: 'Quit over 1 year ago',
+    quit_less_than_1_year: 'Quit less than 1 year ago',
+    current_smoker: 'Current smoker',
+  },
+  alcohol_use: {
+    none: 'No alcohol use',
+    social: 'Social drinker',
+    regular: 'Regular drinker',
+  },
+  education_level: {
+    high_school: 'High school diploma',
+    ged: 'GED',
+    some_college: 'Some college',
+    associates: "Associate's degree",
+    bachelors: "Bachelor's degree",
+    masters: "Master's degree",
+    doctoral: 'Doctoral degree',
+    in_college: 'Currently in college',
+    other: 'Other',
+  },
+  available_to_start: {
+    ready_now: 'Ready now',
+    within_3_months: 'Within 3 months',
+    '3_6_months': '3–6 months',
+    flexible: 'Flexible',
+  },
+  anonymity_level: {
+    anonymous: 'Anonymous',
+    semi_open: 'Semi-open',
+    open: 'Open identity',
+    known: 'Known donor',
+    open_to_discussing: 'Open to discussing',
+  },
+  ed_compensation_range: {
+    '5000_7500': '$5,000 – $7,500',
+    '7500_10000': '$7,500 – $10,000',
+    '10000_15000': '$10,000 – $15,000',
+    '15000_plus': '$15,000+',
+    asrm_guidelines: 'ASRM guidelines',
+    flexible: 'Flexible',
+    not_sure: 'Not sure',
+  },
+};
+
+/** IP field display labels keyed by column name → stored value → label */
+export const IP_LABELS: Record<string, Record<string, string>> = {
+  journey_type: {
+    surrogacy: 'Surrogacy only',
+    egg_donation: 'Egg donation only',
+    both: 'Surrogacy + egg donation',
+    doula_only: 'Journey Doula only',
+  },
+  clinic_status: {
+    not_started: 'Not started',
+    researching: 'Researching clinics',
+    selected: 'Clinic selected',
+    working_with: 'Currently working with a clinic',
+    embryos_stored: 'Embryos already stored',
+  },
+  timeline_to_begin: {
+    immediately: 'Immediately',
+    '1_3_months': '1–3 months',
+    '3_6_months': '3–6 months',
+    '6_plus_months': '6+ months',
+    exploring: 'Just exploring',
+  },
+  views_on_termination: {
+    comfortable_any: 'Comfortable with termination for any reason',
+    severe_medical: 'Only for severe medical conditions',
+    life_threatening: 'Only if life-threatening',
+    not_comfortable: 'Not comfortable with termination',
+    need_to_think: 'Need more time to think about this',
+  },
+};
+
+/**
+ * Universal label lookup — works for any role and field.
+ * Returns human-readable label for a stored enum value.
+ * Falls back to the raw value if no label is found.
+ */
+export function getFieldLabel(fieldKey: string, value: string | null | undefined): string {
+  if (!value) return '—';
+  const map = { ...GC_LABELS, ...ED_LABELS, ...IP_LABELS };
+  return map[fieldKey]?.[value] ?? value;
+}
