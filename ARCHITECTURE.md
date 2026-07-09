@@ -151,6 +151,7 @@ Before writing any query that touches profile or journey data:
 - [ ] If I'm creating a `journeys` row for any reason, am I going through `ensureJourneyRow()` and mapping journey types through `mapToJourneyType()`?
 - [ ] If I'm checking verification status, am I using `verified` for ID and `cleared` for background checks?
 - [ ] If I'm linking to a Journey Doula task, am I using the `task_type` string from the `tasks` table?
+- [ ] If a migration replaces a database function with DROP FUNCTION + CREATE FUNCTION, the ACL is reset. Re-grant EXECUTE explicitly (e.g. `GRANT EXECUTE ON FUNCTION ... TO authenticated;`) for every function the frontend calls via `.rpc()`. CREATE OR REPLACE preserves grants; DROP + CREATE silently strips them (incident: get_ips_for_gc, 2026-07-09).
 
 ---
 
