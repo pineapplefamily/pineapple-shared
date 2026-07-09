@@ -33,7 +33,7 @@ export const GC_FIELDS = {
   VAPING_STATUS: 'gc_vaping_status',
   ALCOHOL_USE: 'gc_alcohol_use',
   MARIJUANA_USE: 'gc_marijuana_use',
-  SUBSTANCE_USE: 'gc_substance_use',
+  SUBSTANCE_USE: 'gc_illegal_drug_use',
   MENTAL_HEALTH_HISTORY: 'gc_mental_health_history',
   CHRONIC_CONDITIONS: 'gc_chronic_conditions',
   CONDITION_MEDICATIONS: 'gc_condition_medications',
@@ -613,7 +613,7 @@ export const ED_FIELDS = {
   SMOKING_STATUS: 'smoking_status',
   ALCOHOL_USE: 'alcohol_use',
   MARIJUANA_USE: 'marijuana_use',
-  SUBSTANCE_USE: 'drug_use',
+  SUBSTANCE_USE: 'ed_illegal_drug_use',
   EDUCATION_LEVEL: 'education_level',
   COMPENSATION_RANGE: 'ed_compensation_range',
   ANONYMITY_LEVEL: 'anonymity_level',
@@ -1345,4 +1345,51 @@ export function getFieldLabel(fieldKey: string, value: string | null | undefined
   if (!value) return '—';
   const map = { ...GC_LABELS, ...ED_LABELS, ...IP_LABELS };
   return map[fieldKey]?.[value] ?? value;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Illegal-drug-use vocabulary conversion
+// ═══════════════════════════════════════════════════════════════════
+//
+// Canonical storage (gc_profiles.gc_illegal_drug_use, donor_profiles.ed_illegal_drug_use)
+// uses one of exactly four strings. Onboarding screens and screening services use
+// short enum tokens as in-flight state. Convert only at the DB read/write boundary.
+
+export const DRUG_CANONICAL_NO = 'No';
+export const DRUG_CANONICAL_PAST_OVER_2 = 'Yes, but more than 2 years ago and I am not currently using';
+export const DRUG_CANONICAL_PAST_UNDER_2 = 'Yes, within the past 2 years';
+export const DRUG_CANONICAL_CURRENT = 'Yes, I am currently using';
+
+const DRUG_TOKEN_TO_CANONICAL: Record<string, string> = {
+  no_history: DRUG_CANONICAL_NO,
+  Never: DRUG_CANONICAL_NO,
+  never: DRUG_CANONICAL_NO,
+  past_over_2_years: DRUG_CANONICAL_PAST_OVER_2,
+  past_under_2_years: DRUG_CANONICAL_PAST_UNDER_2,
+  current_use: DRUG_CANONICAL_CURRENT,
+};
+
+const DRUG_CANONICAL_TO_TOKEN: Record<string, string> = {
+  [DRUG_CANONICAL_NO]: 'no_history',
+  [DRUG_CANONICAL_PAST_OVER_2]: 'past_over_2_years',
+  [DRUG_CANONICAL_PAST_UNDER_2]: 'past_under_2_years',
+  [DRUG_CANONICAL_CURRENT]: 'current_use',
+};
+
+const DRUG_CANONICAL_SET = new Set(Object.values(DRUG_TOKEN_TO_CANONICAL));
+const DRUG_TOKEN_SET = new Set(Object.values(DRUG_CANONICAL_TO_TOKEN));
+
+/** Convert an in-flight token (or legacy 'Never') to the canonical storage string. Canonical strings pass through unchanged. */
+export function drugTokenToCanonical(v: any): string {
+  if (typeof v !== 'string' || !v) return '';
+  if (DRUG_CANONICAL_SET.has(v)) return v;
+  return DRUG_TOKEN_TO_CANONICAL[v] ?? v;
+}
+
+/** Convert a canonical storage string to the in-flight enum token. Tokens pass through unchanged. */
+export function drugCanonicalToToken(v: any): string {
+  if (typeof v !== 'string' || !v) return '';
+  if (DRUG_TOKEN_SET.has(v)) return v;
+  if (v === 'Never') return 'no_history';
+  return DRUG_CANONICAL_TO_TOKEN[v] ?? v;
 }
