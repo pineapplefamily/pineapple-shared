@@ -1,0 +1,237 @@
+/*
+ * Pineapple Design Tokens — CANONICAL SOURCE OF TRUTH
+ *
+ * Both pineapple-admin/src/index.css and pf-primary/src/index.css must mirror these
+ * token values. This repo is a manual mirror (like profileFields.ts): there is no build
+ * step here, so keeping the two app stylesheets in sync with this file is done by hand.
+ * When you change a token in either app, update it here too, and vice versa.
+ *
+ * Brand fonts load from Adobe Fonts kit jwu6ygh:
+ *   <link rel="stylesheet" href="https://use.typekit.net/jwu6ygh.css">
+ *   display: "new-spirit", ...  |  UI: "quicksand", ...
+ */
+
+:root {
+  --font-size: 14px;
+  
+  /* Backgrounds - warm off-white palette */
+  --background: 40 33% 98%; /* #FAFAF9 */
+  --foreground: 24 10% 10%; /* #1C1917 */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 24 10% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 24 10% 10%;
+  
+  /* Primary - darker green for accessibility */
+  --primary: 120 33% 27%; /* #2D5A2D */
+  --primary-foreground: 40 33% 98%;
+  
+  /* Secondary */
+  --secondary: 24 6% 83%; /* #D6D3D1 */
+  --secondary-foreground: 24 10% 10%;
+  
+  /* Muted */
+  --muted: 40 20% 96%; /* #F5F5F4 */
+  --muted-foreground: 24 6% 34%; /* #57534E */
+  
+  /* Accent - gold for highlights */
+  --accent: 45 93% 47%; /* #D97706 */
+  --accent-foreground: 24 10% 10%;
+  
+  /* Destructive */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  
+  /* UI Elements */
+  --border: 30 6% 90%; /* #E7E5E4 */
+  --input: 30 6% 90%;
+  --input-background: 40 33% 98%;
+  --switch-background: 40 20% 96%;
+  --ring: 120 33% 27%;
+  
+  /* Chart colors */
+  --chart-1: 120 33% 27%;
+  --chart-2: 36 77% 49%;
+  --chart-3: 120 53% 53%;
+  --chart-4: 45 96% 64%;
+  --chart-5: 24 6% 34%;
+  
+  --radius: 0.75rem;
+  
+  /* Sidebar */
+  --sidebar: 40 33% 98%;
+  --sidebar-foreground: 24 10% 10%;
+  --sidebar-primary: 120 33% 27%;
+  --sidebar-primary-foreground: 40 33% 98%;
+  --sidebar-accent: 45 93% 47%;
+  --sidebar-accent-foreground: 24 10% 10%;
+  --sidebar-border: 30 6% 90%;
+  --sidebar-ring: 120 33% 27%;
+  
+  /* Brand colors - new premium palette */
+  --brand-green: 120 33% 27%; /* #2D5A2D - dark green for text */
+  --brand-green-light: 120 34% 36%; /* #3D7B3D - for icons/decorative */
+  --brand-green-bg: 142 76% 91%; /* #DCFCE7 */
+  --brand-gold: 36 77% 49%; /* #D97706 - large text only */
+  --brand-gold-fill: 45 96% 64%; /* #FCD34D - fills/icons */
+  --brand-gold-bg: 48 96% 89%; /* #FEF3C7 */
+  
+  /* Status colors */
+  --status-complete: 142 71% 73%; /* #4ADE80 */
+  --status-active: 45 96% 64%; /* #FCD34D */
+  --status-pending: 30 6% 90%; /* #E7E5E4 */
+  
+  /* Legacy brand colors - mapped to new values */
+  --pineapple-green: 120 33% 27%;
+  --trust-navy: 24 10% 10%;
+  --celebration-saffron: 45 96% 64%;
+  --medical-blue: 217 33% 46%;
+  --energy-tangerine: 25 89% 57%;
+  --community-purple: 280 28% 49%;
+  --payne-gray: 24 6% 34%;
+  --light-gray: 40 33% 98%;
+  
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+
+  /* --- V3 Homepage Redesign Tokens -----------------------------------
+   * Source of truth: Figma file MqNGyiSoE9Fywhmkfjktjs, Brand Guides
+   * "Colors V2" canvas (node 563:500). Tokens are namespaced --v3-*
+   * and coexist with existing platform tokens. Phase D will migrate
+   * platform components to v3. Until then, only /landing-v3 and v3
+   * components should reference these.
+   *
+   * Naming follows Brand Guides Color V2: each color family has
+   * primary / dark / bright variants. "primary" is the most saturated
+   * brand value (e.g. green-primary = #6DB245 sage), "dark" is the
+   * deep accent used for text on cream (e.g. green-dark = #336318),
+   * "bright" is the soft pastel role-pill background.
+   */
+
+  /* Green family (Parents / Doula / family wordmark) */
+  --v3-green-primary: 98 44% 48%;        /* #6DB245 — Parents module bg, wordmark */
+  --v3-green-dark: 98 61% 24%;           /* #336318 — text on cream, primary CTA */
+  --v3-green-bright: 92 67% 92%;         /* #E9F8DC — IP/parent role pill bg */
+
+  /* Yellow family (Surrogates) */
+  --v3-yellow-primary: 46 100% 50%;      /* #FFC500 — Surrogates module bg */
+  --v3-yellow-dark: 41 100% 46%;         /* #EDA200 — surrogate accent / border */
+  --v3-yellow-bright: 47 100% 93%;       /* #FFF8DE — surrogate role pill bg */
+
+  /* Orange family (Egg Donors) */
+  --v3-orange-primary: 21 100% 66%;      /* #FF9553 — Egg donors module bg */
+  --v3-orange-dark: 23 98% 34%;          /* #AC4302 — donor accent / border */
+  --v3-orange-bright: 26 100% 94%;       /* #FFEEE1 — donor role pill bg */
+
+  /* Foundations */
+  --v3-surface-cream: 47 100% 98%;       /* #FFFDF6 — Hero / page bg */
+  --v3-surface-cool: 0 5% 92%;           /* #EBE9E9 — preview page bg */
+  --v3-text-primary: 215 54% 7%;         /* #08101B — near-black on cream */
+
+  /* Education Hub topic bucket accents */
+  --bucket-101: 38 62% 90%;              /* #F5E9D4 — Surrogacy & ED 101 bg */
+  --bucket-101-ink: 34 55% 27%;          /* #6B4A1F — Surrogacy & ED 101 ink */
+  --bucket-costs: 48 96% 89%;            /* #FEF3C7 — Costs & Compensation bg */
+  --bucket-costs-ink: 34 82% 31%;        /* #92580E — Costs & Compensation ink */
+  --bucket-legal: 215 36% 90%;           /* #DBE3EE — Legal & State Laws bg */
+  --bucket-legal-ink: 216 34% 24%;       /* #283952 — Legal & State Laws ink */
+  --bucket-health: 199 40% 91%;          /* #DEEBF1 — Health & Medical bg */
+  --bucket-health-ink: 208 45% 32%;      /* #2D5577 — Health & Medical ink */
+  --bucket-industry: 20 80% 92%;         /* #FBE5DA — Inside the Industry bg */
+  --bucket-industry-ink: 17 77% 34%;     /* #9A3A14 — Inside the Industry ink */
+
+
+  /* Typography
+   * Adobe Fonts kit jwu6ygh provides New Spirit (display: 400/500/700
+   * + italics) and Quicksand (UI body: 300/400/500/700). The fallback
+   * chain renders system faces if the kit fails to load.
+   *
+   * Note: Quicksand SemiBold (600) is not in the kit and Adobe does
+   * not offer Quicksand at weight 600. Tailwind `font-semibold` would
+   * font-match to 700, which reads heavier than Figma's SemiBold spec.
+   * v3 components use `font-medium` (500) for emphasized UI text and
+   * `font-bold` (700) only where Figma explicitly designs at Bold.
+   */
+  --v3-font-display: "new-spirit", "Newlyn", Georgia, "Times New Roman", serif;
+  --v3-font-ui: "quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Shape tokens (literal values from Figma) */
+  --v3-radius-pill: 25.701px;
+  --v3-radius-card-brand: 27.342px;
+  --v3-arrow-circle: 94px;
+}
+
+.dark {
+  /* Backgrounds - warm charcoal, NOT pure black */
+  --background: 24 10% 10%; /* #1C1917 */
+  --foreground: 40 33% 98%; /* #FAFAF9 */
+  --card: 20 6% 15%; /* #292524 */
+  --card-foreground: 40 33% 98%;
+  --popover: 20 6% 15%;
+  --popover-foreground: 40 33% 98%;
+  
+  /* Primary */
+  --primary: 142 69% 78%; /* #86EFAC - mint green for dark mode */
+  --primary-foreground: 24 10% 10%;
+  
+  /* Secondary */
+  --secondary: 24 6% 27%; /* #44403C */
+  --secondary-foreground: 40 33% 98%;
+  
+  /* Muted */
+  --muted: 24 6% 27%;
+  --muted-foreground: 40 33% 98%;
+  
+  /* Accent */
+  --accent: 45 96% 64%; /* #FCD34D */
+  --accent-foreground: 24 10% 10%;
+  
+  /* Destructive */
+  --destructive: 0 72% 73%;
+  --destructive-foreground: 24 10% 10%;
+  
+  /* UI Elements */
+  --border: 24 6% 27%;
+  --input: 24 6% 27%;
+  --ring: 142 69% 78%;
+  
+  /* Chart colors */
+  --chart-1: 142 69% 78%;
+  --chart-2: 45 96% 64%;
+  --chart-3: 142 71% 73%;
+  --chart-4: 36 100% 50%;
+  --chart-5: 280 28% 49%;
+  
+  /* Sidebar */
+  --sidebar: 24 6% 27%;
+  --sidebar-foreground: 40 33% 98%;
+  --sidebar-primary: 142 69% 78%;
+  --sidebar-primary-foreground: 24 10% 10%;
+  --sidebar-accent: 45 96% 64%;
+  --sidebar-accent-foreground: 24 10% 10%;
+  --sidebar-border: 24 6% 27%;
+  --sidebar-ring: 142 69% 78%;
+  
+  /* Brand colors - dark mode adjusted */
+  --brand-green: 142 69% 78%; /* #86EFAC */
+  --brand-green-light: 142 71% 73%; /* #4ADE80 */
+  --brand-green-bg: 143 64% 20%; /* #14532D */
+  --brand-gold: 45 96% 64%; /* #FCD34D */
+  --brand-gold-fill: 38 92% 50%; /* #F59E0B */
+  --brand-gold-bg: 28 73% 9%; /* #422006 */
+  
+  /* Status colors */
+  --status-complete: 142 71% 73%;
+  --status-active: 45 96% 64%;
+  --status-pending: 24 6% 27%;
+  
+  /* Legacy brand colors - dark mode */
+  --pineapple-green: 142 69% 78%;
+  --trust-navy: 40 33% 98%;
+  --celebration-saffron: 45 96% 64%;
+  --medical-blue: 217 45% 60%;
+  --energy-tangerine: 25 89% 57%;
+  --community-purple: 280 40% 60%;
+  --payne-gray: 40 33% 98%;
+  --light-gray: 24 10% 10%;
+}
