@@ -142,6 +142,23 @@ tasks.find(t => t.id === taskIdFromUrl || t.task_type === taskIdFromUrl)
 
 ---
 
+## Database Object Security — Public Schema Defaults
+
+Supabase applies default privileges in the `public` schema: **every new table, view, and function is automatically granted to `anon` and `authenticated` at creation.** Creating an object in `public` IS exposing it through PostgREST until access is explicitly revoked.
+
+This caused a production security incident (advisor criticals, 2026-07-20/21): `v_admin_user_analytics` (joins `auth.users`, exposes every user's email) and `get_admin_analytics()` were created for the admin portal and were immediately readable/callable by anyone holding the anon key that ships in the frontend bundle. `cio_track_dedupe` was created without RLS and was world-readable and world-writable.
+
+Rules — non-negotiable, enforced in the same migration that creates the object:
+
+- Every new table in `public` gets `ENABLE ROW LEVEL SECURITY` in its creation migration. No exceptions, including internal/service tables.
+- Service-only tables (written only by SECURITY DEFINER functions or service-role paths) get RLS enabled with **no policies** plus `REVOKE ALL ON TABLE ... FROM anon, authenticated;`.
+- Admin-only or service-only views and functions get `REVOKE ALL`/`REVOKE EXECUTE ... FROM PUBLIC, anon, authenticated;` in their creation migration. Only `service_role` retains access.
+- No view in `public` may reference `auth.users` unless its API-role access is revoked in the same migration. `auth.users` contains every user's email.
+- After any migration that creates or replaces a table, view, or function, run the Supabase security advisors (security lints) against the target environment before declaring the work done. A new ERROR-level lint means the work is not done.
+- These rules bind BOTH Lovable projects. The admin portal (`pineapple-admin`) writes to the same production database; deploying straight to prod does not exempt it — it raises the stakes.
+
+---
+
 ## Adding New Features — Checklist
 
 Before writing any query that touches profile or journey data:
@@ -153,6 +170,8 @@ Before writing any query that touches profile or journey data:
 - [ ] If I'm linking to a Journey Doula task, am I using the `task_type` string from the `tasks` table?
 - [ ] If a migration replaces a database function with DROP FUNCTION + CREATE FUNCTION, the ACL is reset. Re-grant EXECUTE explicitly (e.g. `GRANT EXECUTE ON FUNCTION ... TO authenticated;`) for every function the frontend calls via `.rpc()`. CREATE OR REPLACE preserves grants; DROP + CREATE silently strips them (incident: get_ips_for_gc, 2026-07-09).
 
+- [ ] If this change creates a new table, view, or function in `public`: RLS is enabled (tables) and `anon`/`authenticated` access is explicitly revoked in the SAME migration unless client access is intended. Supabase default privileges auto-grant everything to API roles at creation (incident: `v_admin_user_analytics` email exposure, 2026-07-21). See 'Database Object Security'.
+- [ ] If the new object is admin-only or service-only, only `service_role` can touch it, verified by running the Supabase security advisors on the target environment before declaring done.
 ---
 
 ## Canonical Profile Fields
