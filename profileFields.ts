@@ -12,8 +12,15 @@
 // GC (Gestational Carrier) Profile
 // ═══════════════════════════════════════════════════════════════════
 
+/** Canonical shared `profiles` column names */
+export const PROFILE_FIELDS = {
+  LEGAL_FIRST_NAME: 'legal_first_name',
+  LEGAL_LAST_NAME: 'legal_last_name',
+} as const;
+
 /** Canonical gc_profiles column names */
 export const GC_FIELDS = {
+
   TOTAL_PREGNANCIES: 'gc_total_pregnancies',
   LIVE_BIRTHS: 'gc_live_births',
   CSECTION_COUNT: 'gc_csection_count',
@@ -451,6 +458,7 @@ export const IP_FIELDS = {
   DONOR_ETHNICITY_PREFERENCES: 'donor_ethnicity_preferences',
   DONOR_EXPERIENCE_PREFERENCE: 'donor_experience_preference',
   DONOR_ANONYMITY_PREFERENCE: 'donor_anonymity_preference',
+  COORD_DISCLAIMER_ACK_AT: 'coord_disclaimer_ack_at',
 } as const;
 
 /** Canonical IP enum values */
@@ -619,6 +627,8 @@ export const ED_FIELDS = {
   ANONYMITY_LEVEL: 'anonymity_level',
   PRIOR_DONATIONS: 'prior_donations',
   AVAILABLE_TO_START: 'available_to_start',
+  COORD_DISCLAIMER_ACK_AT: 'coord_disclaimer_ack_at',
+  TRAVEL_WILLINGNESS: 'ed_travel_willingness',
 } as const;
 
 /** Canonical ED enum values — uses onboarding values as canonical */
@@ -1393,3 +1403,21 @@ export function drugCanonicalToToken(v: any): string {
   if (v === 'Never') return 'no_history';
   return DRUG_CANONICAL_TO_TOKEN[v] ?? v;
 }
+
+/**
+ * gc_candidates.status — canonical values enforced by the DB CHECK constraint.
+ * Do not use any status not listed here; writes will fail at the DB.
+ */
+export const GC_CANDIDATE_STATUS = {
+  FAVORITED: 'favorited',
+  INTERESTED: 'interested',
+  MUTUAL: 'mutual',
+  INTERVIEWING: 'interviewing',
+  SELECTED: 'selected',
+  DECLINED: 'declined',
+  ARCHIVED: 'archived',
+} as const;
+
+export type GCCandidateStatus = typeof GC_CANDIDATE_STATUS[keyof typeof GC_CANDIDATE_STATUS];
+
+
