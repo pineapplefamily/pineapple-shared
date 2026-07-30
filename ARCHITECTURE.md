@@ -187,3 +187,17 @@ allowed values. This is the single source of truth.
 
 Column name mismatches and vocabulary mismatches between surfaces are the primary
 source of data not appearing where expected. profileFields.ts prevents this.
+
+## Deploy caveat: merged-SHA production deploys can be silently dropped (observed 2026-07-30, PR #449)
+
+When a PR from staging is merged into main, an automation fast-forwards staging to the same merge
+commit within seconds. GitHub then delivers two push events (staging and main) carrying the identical
+SHA, and Vercel can drop the main event: only a preview deployment attributed to staging is created and
+pineapplefamily.org keeps serving the previous production deployment. PR #448 got both deployments;
+PR #449 got only the preview.
+
+Rule: after every merge to main, the four-point verification must confirm a deployment with
+target=production built from the merge SHA, not merely a READY deployment from that SHA. A staging-ref
+preview of the merge commit does NOT count. If no production deployment appears within a few minutes,
+the remedy is a new commit through staging and a re-merge (never a direct push to main), which produces
+a fresh merge SHA and a clean main push event.
