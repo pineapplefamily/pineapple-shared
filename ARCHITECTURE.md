@@ -201,3 +201,28 @@ target=production built from the merge SHA, not merely a READY deployment from t
 preview of the merge commit does NOT count. If no production deployment appears within a few minutes,
 the remedy is a new commit through staging and a re-merge (never a direct push to main), which produces
 a fresh merge SHA and a clean main push event.
+
+## Vercel server layer (hand-maintained, not Lovable)
+
+These files are edited directly, not through Lovable prompts. Lovable must not modify them; if a
+Lovable change appears to need them, stop and flag it instead:
+
+- `vercel.json` (headers, redirects, rewrites; rewrite order matters, the SPA catch-all must stay last)
+- `middleware.ts` (crawler OG tags for `/webinars/:slug` and `/family-fronds` only)
+- `api/**` (Vercel serverless functions; files prefixed `_` are not routes)
+
+Public SEO surfaces served by functions:
+
+- `/sitemap.xml` -> `api/sitemap.ts`. Explicit `application/xml`. Reads `articles` with the publishable
+  key and `status = 'published'`, so RLS decides what is listed. Do not proxy the sitemap to a Supabase
+  edge function again: the Supabase gateway delivered it as `text/plain` and Search Console rejected it.
+- `/education` and `/education/:slug` -> `api/education.ts`. Serves the app shell with the article (or
+  index) prerendered inside `#root`, plus title, meta, canonical, OG and JSON-LD. Same HTML for every
+  visitor; browsers hide `#prerender` and React replaces `#root` on mount. Unpublished or unknown slugs
+  return a real 404. Must use the same `status = 'published'` filter as `src/pages/ArticlePage.tsx`.
+
+Environment: functions read `VITE_SUPABASE_URL` and a publishable/anon key at runtime. Those Vercel
+variables exist for Production and for the `staging` branch Preview only. Feature-branch previews have
+none, so the functions fall back to prod only when `VERCEL_ENV === 'production'` and otherwise fail
+closed (`X-Sitemap-Error` / `X-Prerender: passthrough-env-missing-url`). Test these functions on
+dev.pineapplefamily.org after merging to staging, not on feature-branch preview URLs.
